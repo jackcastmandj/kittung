@@ -16,8 +16,10 @@
 }
 
 body{
+
     width:100%;
     height:100vh;
+
     overflow:hidden;
 
     display:flex;
@@ -25,6 +27,7 @@ body{
     align-items:center;
 
     background:white;
+
     font-family:Arial, sans-serif;
 }
 
@@ -48,6 +51,7 @@ body{
 .title{
 
     font-size:clamp(30px, 5vw, 60px);
+
     font-weight:bold;
 
     margin-bottom:20px;
@@ -57,6 +61,7 @@ body{
 .dog{
 
     width:min(70vw, 280px);
+
     height:auto;
 
     object-fit:contain;
@@ -71,13 +76,15 @@ body{
 .buttons{
 
     display:flex;
+
     gap:20px;
 
     flex-wrap:wrap;
+
     justify-content:center;
 }
 
-/* ปุ่ม */
+/* style ปุ่ม */
 button{
 
     border:none;
@@ -93,16 +100,18 @@ button{
     cursor:pointer;
 
     background:#0057ff;
+
     color:white;
 
     transition:0.2s;
 }
 
 button:hover{
+
     transform:scale(1.08);
 }
 
-/* video page */
+/* หน้า video */
 #videoPage{
 
     display:none;
@@ -123,18 +132,21 @@ button:hover{
     z-index:9999;
 }
 
-/* video */
+/* video แนวนอน */
 #video{
 
-    width:100vw;
-    height:100vh;
+    width:100%;
+
+    max-width:100vw;
+
+    aspect-ratio:16 / 9;
 
     object-fit:contain;
 
     background:black;
 }
 
-/* yay */
+/* ข้อความ */
 .yay{
 
     position:absolute;
@@ -146,7 +158,7 @@ button:hover{
 
     color:white;
 
-    font-size:clamp(25px, 5vw, 60px);
+    font-size:clamp(24px, 5vw, 60px);
 
     font-weight:bold;
 
@@ -155,47 +167,10 @@ button:hover{
     text-shadow:0 0 20px pink;
 }
 
-/* มือถือแนวตั้ง */
-#rotateMessage{
-
-    display:none;
-
-    position:fixed;
-    inset:0;
-
-    background:black;
-    color:white;
-
-    justify-content:center;
-    align-items:center;
-
-    text-align:center;
-
-    padding:30px;
-
-    font-size:clamp(24px, 5vw, 40px);
-
-    z-index:999999;
-}
-
-/* ถ้าเป็นมือถือแนวตั้ง */
-@media screen and (orientation: portrait){
-
-    #rotateMessage{
-        display:flex;
-    }
-
-}
-
 </style>
 </head>
 
 <body>
-
-<!-- แจ้งเตือนหมุนจอ -->
-<div id="rotateMessage">
-    📱 กรุณาหมุนมือถือแนวนอน
-</div>
 
 <!-- หน้าแรก -->
 <div class="container" id="mainPage">
@@ -204,8 +179,10 @@ button:hover{
         PLS ACCEPT THE GIFT
     </div>
 
+    <!-- รูปหมา -->
     <img src="dog.png" class="dog">
 
+    <!-- ปุ่ม -->
     <div class="buttons">
 
         <button onclick="acceptGift()">
@@ -260,48 +237,24 @@ noBtn.addEventListener("mouseover", () => {
 
 
 
+// กด YES
+function acceptGift(){
 
-// ล็อกแนวนอน
-async function lockLandscape(){
+    // fullscreen
+    if(document.documentElement.requestFullscreen){
 
-    try{
-
-        // fullscreen
-        if(document.documentElement.requestFullscreen){
-            await document.documentElement.requestFullscreen();
-        }
-
-        // landscape
-        if(screen.orientation && screen.orientation.lock){
-            await screen.orientation.lock("landscape");
-        }
-
-    }catch(err){
-
-        console.log(err);
+        document.documentElement.requestFullscreen();
 
     }
-
-}
-
-
-
-// กด YES
-async function acceptGift(){
-
-    await lockLandscape();
 
     // ซ่อนหน้าแรก
     document.getElementById("mainPage").style.display = "none";
 
-    // แสดง video
+    // แสดงหน้า video
     document.getElementById("videoPage").style.display = "flex";
 
     // เล่น video
-    const video = document.getElementById("video");
-
-    video.play();
-
+    document.getElementById("video").play();
 }
 
 </script>
