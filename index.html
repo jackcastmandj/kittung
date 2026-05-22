@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,12 +24,13 @@ body{
     justify-content:center;
     align-items:center;
 
-    font-family:Arial, sans-serif;
     background:white;
+    font-family:Arial, sans-serif;
 }
 
 /* หน้าแรก */
 .container{
+
     width:100%;
     max-width:900px;
 
@@ -37,51 +39,61 @@ body{
     justify-content:center;
     align-items:center;
 
-    padding:20px;
     text-align:center;
+
+    padding:20px;
 }
 
 /* หัวข้อ */
 .title{
-    font-size:clamp(28px, 5vw, 60px);
+
+    font-size:clamp(30px, 5vw, 60px);
     font-weight:bold;
+
     margin-bottom:20px;
 }
 
 /* รูปหมา */
 .dog{
-    width:min(60vw, 280px);
+
+    width:min(70vw, 280px);
     height:auto;
-    margin-bottom:25px;
 
     object-fit:contain;
+
+    margin-bottom:25px;
+
     user-select:none;
     pointer-events:none;
 }
 
 /* ปุ่ม */
 .buttons{
+
     display:flex;
     gap:20px;
+
     flex-wrap:wrap;
     justify-content:center;
 }
 
-/* style ปุ่ม */
+/* ปุ่ม */
 button{
+
     border:none;
 
-    padding:14px 32px;
-
-    font-size:clamp(18px, 2vw, 28px);
+    padding:14px 34px;
 
     border-radius:18px;
 
-    background:#0057ff;
-    color:white;
+    font-size:clamp(18px, 2vw, 28px);
 
     font-weight:bold;
+
     cursor:pointer;
+
+    background:#0057ff;
+    color:white;
 
     transition:0.2s;
 }
@@ -90,8 +102,9 @@ button:hover{
     transform:scale(1.08);
 }
 
-/* หน้า video */
+/* video page */
 #videoPage{
+
     display:none;
 
     position:fixed;
@@ -106,48 +119,70 @@ button:hover{
     align-items:center;
 
     overflow:hidden;
+
+    z-index:9999;
 }
 
-/* video เต็มจอ */
+/* video */
 #video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+
+    width:100vw;
+    height:100vh;
+
+    object-fit:contain;
+
+    background:black;
 }
 
-/* ข้อความ */
+/* yay */
 .yay{
+
     position:absolute;
 
     top:5%;
     left:50%;
+
     transform:translateX(-50%);
 
     color:white;
 
-    font-size:clamp(24px, 5vw, 60px);
+    font-size:clamp(25px, 5vw, 60px);
 
     font-weight:bold;
 
-    z-index:10;
+    z-index:100;
 
     text-shadow:0 0 20px pink;
 }
 
+/* มือถือแนวตั้ง */
+#rotateMessage{
 
-/* มือถือ */
-@media (max-width:600px){
+    display:none;
 
-    .buttons{
-        gap:12px;
-    }
+    position:fixed;
+    inset:0;
 
-    button{
-        padding:12px 24px;
-    }
+    background:black;
+    color:white;
 
-    .dog{
-        width:min(75vw, 260px);
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:30px;
+
+    font-size:clamp(24px, 5vw, 40px);
+
+    z-index:999999;
+}
+
+/* ถ้าเป็นมือถือแนวตั้ง */
+@media screen and (orientation: portrait){
+
+    #rotateMessage{
+        display:flex;
     }
 
 }
@@ -156,6 +191,11 @@ button:hover{
 </head>
 
 <body>
+
+<!-- แจ้งเตือนหมุนจอ -->
+<div id="rotateMessage">
+    📱 กรุณาหมุนมือถือแนวนอน
+</div>
 
 <!-- หน้าแรก -->
 <div class="container" id="mainPage">
@@ -167,8 +207,15 @@ button:hover{
     <img src="dog.png" class="dog">
 
     <div class="buttons">
-        <button onclick="acceptGift()">YES</button>
-        <button id="noBtn">NO</button>
+
+        <button onclick="acceptGift()">
+            YES
+        </button>
+
+        <button id="noBtn">
+            NO
+        </button>
+
     </div>
 
 </div>
@@ -177,19 +224,19 @@ button:hover{
 <div id="videoPage">
 
     <div class="yay">
-        ❤️
+        😘❤️
     </div>
 
-    <video id="video" autoplay playsinline>
+    <video
+        id="video"
+        autoplay
+        playsinline
+        controls
+    >
         <source src="video.mp4" type="video/mp4">
     </video>
 
 </div>
-
-<!-- เพลง -->
-<audio id="bgMusic" loop>
-    <source src="music.mp3" type="audio/mp3">
-</audio>
 
 <script>
 
@@ -204,43 +251,57 @@ noBtn.addEventListener("mouseover", () => {
     const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
     noBtn.style.position = "absolute";
+
     noBtn.style.left = x + "px";
+
     noBtn.style.top = y + "px";
 
 });
 
 
-// YES
-function acceptGift(){
 
-    openFullscreen();
 
-    document.getElementById("mainPage").style.display = "none";
+// ล็อกแนวนอน
+async function lockLandscape(){
 
-    document.getElementById("videoPage").style.display = "flex";
+    try{
 
-    document.getElementById("video").play();
+        // fullscreen
+        if(document.documentElement.requestFullscreen){
+            await document.documentElement.requestFullscreen();
+        }
 
-    document.getElementById("bgMusic").play();
+        // landscape
+        if(screen.orientation && screen.orientation.lock){
+            await screen.orientation.lock("landscape");
+        }
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
 }
 
 
-// fullscreen
-function openFullscreen(){
 
-    let elem = document.documentElement;
+// กด YES
+async function acceptGift(){
 
-    if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-    }
+    await lockLandscape();
 
-    else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-    }
+    // ซ่อนหน้าแรก
+    document.getElementById("mainPage").style.display = "none";
 
-    else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
-    }
+    // แสดง video
+    document.getElementById("videoPage").style.display = "flex";
+
+    // เล่น video
+    const video = document.getElementById("video");
+
+    video.play();
+
 }
 
 </script>
